@@ -13,5 +13,8 @@
     "start": "nodemon server/server.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.3.3"
+  }
 }

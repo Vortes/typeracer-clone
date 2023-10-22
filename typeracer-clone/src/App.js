@@ -2,6 +2,7 @@ import { useState } from "react";
 import TypingWorkspace from "./TypingWorkspace";
 import CountdownTimer from "./CountdownTimer";
 import DisplayWPM from "./DisplayWPM";
+import styles from "./styles.css"
 
 function App() {
   const [timer, setTimer] = useState(15);

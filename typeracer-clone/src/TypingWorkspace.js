@@ -10,9 +10,6 @@ const TypingWorkspace = ({
     setErrorIndexes,
     currentIndex,
 }) => {
-    //   const paragraph =
-    //     "When you are certain you have become quite a proficient touch typist, you can put yourself to the ultimate fun test. Sit at your computer and have someone place a blindfold over your eyes. Next have your assistant dictate to you";
-
     const [paragraph, setParagraph] = useState("")
 
     useEffect(()=> {
@@ -51,7 +48,7 @@ const TypingWorkspace = ({
     return (
         <>
             <input type="text" onChange={readInput} value={inputText} />
-            <p>{paragraph}</p>
+            <p className="mt-12 mb-12">{paragraph}</p>
             <p>{inputText}</p>
             <p>error at {errorIndexes}</p>
         </>
