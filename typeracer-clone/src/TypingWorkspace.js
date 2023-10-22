@@ -43,10 +43,10 @@ const TypingWorkspace = ({
             e.target.disabled = true
         }
 
-        if (e.target.value[currentIndex] === paragraphArray[currentIndex]) {
+        if (e.target.value[Number(currentIndex+1)] === paragraphArray[Number(currentIndex+1)]) {
             setCharClassNames(prevClassNames => {
                 const newClassNames = [...prevClassNames];
-                newClassNames[currentIndex] = "text-3xl text-textInput";
+                newClassNames[Number(currentIndex+1)] = "text-3xl text-textInput";
                 return newClassNames;
             });
         }
