@@ -1,52 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import getRandomParagraph from "./utils/getRandomParagraph";
 
 const TypingWorkspace = ({
-  timerOn,
-  setTimerOn,
-  inputText,
-  setInputText,
-  errorIndexes,
-  setErrorIndexes,
-  currentIndex,
+    timerOn,
+    setTimerOn,
+    inputText,
+    setInputText,
+    errorIndexes,
+    setErrorIndexes,
+    currentIndex,
 }) => {
-  const paragraph =
-    "When you are certain you have become quite a proficient touch typist, you can put yourself to the ultimate fun test. Sit at your computer and have someone place a blindfold over your eyes. Next have your assistant dictate to you";
-  let paragraphArray = paragraph.split("");
+    //   const paragraph =
+    //     "When you are certain you have become quite a proficient touch typist, you can put yourself to the ultimate fun test. Sit at your computer and have someone place a blindfold over your eyes. Next have your assistant dictate to you";
 
-  const readInput = (e) => {
-    setInputText(e.target.value);
-    if (!timerOn) {
-      setTimerOn(true);
-    }
+    const [paragraph, setParagraph] = useState("")
 
-    if (e.target.value[currentIndex] !== paragraphArray[currentIndex]) {
-      handleError();
-    } else if (errorIndexes.includes(currentIndex)) {
-      correctError();
-    }
-  };
+    useEffect(()=> {
+        const generatedParagraph = getRandomParagraph(35).join(" ")
+        setParagraph(generatedParagraph)
+    }, [])
 
-  const handleError = () => {
-    if (
-      !errorIndexes.includes(currentIndex) &&
-      currentIndex < paragraphArray.length
-    ) {
-      setErrorIndexes([...errorIndexes, currentIndex]);
-    }
-  };
+    let paragraphArray = paragraph.split("");
 
-  const correctError = () => {
-    setErrorIndexes(errorIndexes.filter((error) => error !== currentIndex));
-  };
+    const readInput = (e) => {
+        setInputText(e.target.value);
+        if (!timerOn) {
+            setTimerOn(true);
+        }
 
-  return (
-    <>
-      <input type="text" onChange={readInput} value={inputText} />
-      <p>{paragraph}</p>
-      <p>{inputText}</p>
-      <p>error at {errorIndexes}</p>
-    </>
-  );
+        if (e.target.value[currentIndex] !== paragraphArray[currentIndex]) {
+            handleError();
+        } else if (errorIndexes.includes(currentIndex)) {
+            correctError();
+        }
+    };
+
+    const handleError = () => {
+        if (
+            !errorIndexes.includes(currentIndex) &&
+            currentIndex < paragraphArray.length
+        ) {
+            setErrorIndexes([...errorIndexes, currentIndex]);
+        }
+    };
+
+    const correctError = () => {
+        setErrorIndexes(errorIndexes.filter((error) => error !== currentIndex));
+    };
+
+    return (
+        <>
+            <input type="text" onChange={readInput} value={inputText} />
+            <p>{paragraph}</p>
+            <p>{inputText}</p>
+            <p>error at {errorIndexes}</p>
+        </>
+    );
 };
 
 export default TypingWorkspace;

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import TypingWorkspace from "./TypingWorkspace";
 import CountdownTimer from "./CountdownTimer";
 import DisplayWPM from "./DisplayWPM";
