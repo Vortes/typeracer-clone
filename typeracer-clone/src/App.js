@@ -16,6 +16,7 @@ function App() {
       <div className="mt-44">
       <CountdownTimer timer={timer} setTimer={setTimer} timerOn={timerOn} />
       <TypingWorkspace
+        timer={timer}
         inputText={inputText}
         setInputText={setInputText}
         timerOn={timerOn}

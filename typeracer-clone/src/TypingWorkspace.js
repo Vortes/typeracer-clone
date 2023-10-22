@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import getRandomParagraph from "./utils/getRandomParagraph";
 
 const TypingWorkspace = ({
+    timer,
     timerOn,
     setTimerOn,
     inputText,
@@ -21,6 +22,10 @@ const TypingWorkspace = ({
 
     const readInput = (e) => {
         setInputText(e.target.value);
+        if (timer === 0) {
+            e.target.disabled = true
+        }
+
         if (!timerOn) {
             setTimerOn(true);
         }
@@ -47,9 +52,9 @@ const TypingWorkspace = ({
 
     return (
         <div className="flex flex-col">
-            <input className="border" type="text" onChange={readInput} value={inputText} />
+            <input className="border py-2" type="text" onChange={readInput} value={inputText} />
             <p className="text-3xl text-textParagraph">{paragraph}</p>
-            <p className="text-lg text-texInput">{inputText}</p>
+            <p className="text-2xl text-textInput">{inputText}</p>
             <p className="text-lg text-error">error at {errorIndexes}</p>
         </div>
     );
