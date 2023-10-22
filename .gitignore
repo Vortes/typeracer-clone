@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/typeracer-clone/node_modules
 /.pnp
 .pnp.js
 
