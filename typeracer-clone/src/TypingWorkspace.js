@@ -46,12 +46,12 @@ const TypingWorkspace = ({
     };
 
     return (
-        <>
+        <div className="flex flex-col">
             <input className="border" type="text" onChange={readInput} value={inputText} />
             <p className="text-3xl text-textParagraph">{paragraph}</p>
             <p className="text-lg text-texInput">{inputText}</p>
             <p className="text-lg text-error">error at {errorIndexes}</p>
-        </>
+        </div>
     );
 };
 

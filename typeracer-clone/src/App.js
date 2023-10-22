@@ -12,7 +12,9 @@ function App() {
   let currentIndex = inputText.split("").length - 1;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mx-44">
+      <div className="mt-44">
+      <CountdownTimer timer={timer} setTimer={setTimer} timerOn={timerOn} />
       <TypingWorkspace
         inputText={inputText}
         setInputText={setInputText}
@@ -22,8 +24,8 @@ function App() {
         setErrorIndexes={setErrorIndexes}
         currentIndex={currentIndex}
       />
+      </div>
 
-      <CountdownTimer timer={timer} setTimer={setTimer} timerOn={timerOn} />
       <DisplayWPM timer={timer} timerOn={timerOn} inputText={inputText} />
     </div>
   );
