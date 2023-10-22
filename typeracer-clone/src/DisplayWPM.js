@@ -19,7 +19,7 @@ const DisplayWPM = ({ timer, timerOn, inputText }) => {
   };
   return (
     <>
-      <p>wpm: {wpm}</p>
+      <p className="text-2xl text-textInput">wpm: {wpm}</p>
     </>
   );
 };
