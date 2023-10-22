@@ -47,10 +47,10 @@ const TypingWorkspace = ({
 
     return (
         <>
-            <input type="text" onChange={readInput} value={inputText} />
-            <p className="mt-12 mb-12">{paragraph}</p>
-            <p>{inputText}</p>
-            <p>error at {errorIndexes}</p>
+            <input className="border" type="text" onChange={readInput} value={inputText} />
+            <p className="text-3xl text-textParagraph">{paragraph}</p>
+            <p className="text-lg text-texInput">{inputText}</p>
+            <p className="text-lg text-error">error at {errorIndexes}</p>
         </>
     );
 };

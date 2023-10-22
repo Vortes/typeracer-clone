@@ -12,7 +12,7 @@ function App() {
   let currentIndex = inputText.split("").length - 1;
 
   return (
-    <div>
+    <div className="my-auto flex flex-col">
       <TypingWorkspace
         inputText={inputText}
         setInputText={setInputText}

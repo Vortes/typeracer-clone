@@ -25,7 +25,7 @@ const CountdownTimer = ({ timer, setTimer, timerOn }) => {
   };
   return (
     <>
-      <p>timer: {timer}</p>
+      <p className="text-lg text-secondary">timer: {timer}</p>
     </>
   );
 };
