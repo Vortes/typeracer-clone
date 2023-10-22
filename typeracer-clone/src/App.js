@@ -9,17 +9,21 @@ function App() {
 
   const paragraph = "When you are certain you have become quite a proficient touch typist, you can put yourself to the ultimate fun test. Sit at your computer and have someone place a blindfold over your eyes. Next have your assistant dictate to you"
   let paragraphArray = paragraph.split("")
-  const [timer, setTimer] = useState(3)
+  const [timer, setTimer] = useState(15)
   const [inputText, setInputText] = useState("")
   const [textArray, setTextArray] = useState("")
-  const [calculateWPM, setCalculateWPM] = useState(0)
-  let intervalRef = useRef()
+  const [timerOn, setTimerOn] = useState(false)
+  let intervalRef = useRef(null)
   const [errorIndexes, setErrorIndexes] = useState([])
   let currentIndex = inputText.split("").length -1
 
   const readInput = (e) => {
     setInputText(e.target.value)
     setTextArray(e.target.value.split(''))
+
+    if(!timerOn) {
+      setTimerOn(true)
+    }
 
     if(e.target.value[currentIndex] !== paragraphArray[currentIndex]) {
       handleError();
@@ -44,6 +48,7 @@ function App() {
         return prev - 1;
       } else {
         clearInterval(intervalRef.current);
+        intervalRef.current = null;
         return prev;  // keep it at 0
       }
     });
@@ -51,9 +56,17 @@ function App() {
 
   useEffect(()=> {
     fetchData()
-    intervalRef.current = setInterval(decreaseTime, 1000)
-    return () => clearInterval(intervalRef.current)
-  }, [])
+
+    if(timerOn) {
+            intervalRef.current = setInterval(decreaseTime, 1000);
+      return () => {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+    }
+
+  }
+
+  }, [timerOn])
 
   return (
     <div>
