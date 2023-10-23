@@ -9,13 +9,15 @@ const TypingWorkspace = ({
     setInputText,
     errorIndexes,
     setErrorIndexes,
-    currentIndex,
 }) => {
     const [paragraph, setParagraph] = useState("")
-    const [charClassNames, setCharClassNames] = useState([]);
+    const [charClassNames, setCharClassNames] = useState([])
+    const [errorArray, setErrorArray] = useState([])
+
+    let currentIndex = inputText.split("").length;
 
     useEffect(()=> {
-        const generatedParagraph = getRandomParagraph(35).join(" ")
+        const generatedParagraph = getRandomParagraph(100).join(" ")
         setParagraph(generatedParagraph)
         setCharClassNames(new Array(generatedParagraph.length).fill("text-3xl text-textParagraph"));
     }, [])
@@ -32,8 +34,23 @@ const TypingWorkspace = ({
 
     const paragraphWithHTML = convertParagraphToHTMLArray()
 
+    const handleBackspace = (e) => {
+        if(e.key === "Backspace") {
+            setCharClassNames(prevClassNames => {
+                const newClassNames = [...prevClassNames]
+                newClassNames[Number(currentIndex -1)] = "text-3xl text-textParagraph"
+                return newClassNames
+            })
+        }
+    }
+
     const readInput = (e) => {
         setInputText(e.target.value);   
+
+        if(paragraphWithHTML[currentIndex + 1].props.children === ' ') {
+            console.log("youre typing before a space")
+        }
+        console.log(paragraphWithHTML[currentIndex+1].props.children)
 
         if (!timerOn) {
             setTimerOn(true);
@@ -43,11 +60,11 @@ const TypingWorkspace = ({
             e.target.disabled = true
         }
 
-        if (e.target.value[Number(currentIndex+1)] === paragraphArray[Number(currentIndex+1)]) {
+        if (e.target.value[currentIndex] === paragraphArray[currentIndex]) {
             setCharClassNames(prevClassNames => {
-                const newClassNames = [...prevClassNames];
-                newClassNames[Number(currentIndex+1)] = "text-3xl text-textInput";
-                return newClassNames;
+                const newClassNames = [...prevClassNames]
+                newClassNames[currentIndex] = "text-3xl text-textInput"
+                return newClassNames
             });
         }
 
@@ -64,6 +81,21 @@ const TypingWorkspace = ({
             currentIndex < paragraphArray.length
         ) {
             setErrorIndexes([...errorIndexes, currentIndex]);
+            setCharClassNames(prevClassNames => {
+                const newClassNames = [...prevClassNames]
+                newClassNames[currentIndex] = "text-3xl text-error"
+                return newClassNames
+            });
+            if(paragraphWithHTML[currentIndex + 1].props.children === ' ') {
+                console.log("youre typing before a space")
+            }
+            // setErrorArray(paragraphWithHTML.filter((char)=> {
+            //     return errorIndexes.includes(Number(char.key))
+            // }))
+            // console.log(errorArray)
+            // setParagraph(prevParagraph => {
+            //     return prevParagraph
+            // })
         }
     };
 
@@ -73,13 +105,14 @@ const TypingWorkspace = ({
 
     return (
         <div className="flex flex-col">
-            <input className="border py-2" type="text" onChange={readInput} value={inputText} />
-            {/* <p className="text-3xl text-textParagraph">{paragraph}</p> */}
+            <input className="border py-2" type="text" onChange={readInput} value={inputText} onKeyDown={handleBackspace}/>
             <div>
                 {paragraphWithHTML}
             </div>
-            <p className="text-2xl text-textInput">{inputText}</p>
-            <p className="text-lg text-error">error at {errorIndexes}</p>
+            {/* <p className="text-2xl text-textInput">{inputText}</p> */}
+            <p className="text-lg text-error">error letters: {errorArray}</p>
+            <p className="text-lg text-error">error index: {errorIndexes}</p>
+
         </div>
     );
 };
