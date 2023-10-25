@@ -36,6 +36,9 @@ const TypingWorkspace = ({
 
     const handleBackspace = (e) => {
         if(e.key === "Backspace") {
+            if(e.target.className === "text-3xl text-error") {
+                console.log("error text")
+            }
             setCharClassNames(prevClassNames => {
                 const newClassNames = [...prevClassNames]
                 newClassNames[Number(currentIndex -1)] = "text-3xl text-textParagraph"
@@ -47,10 +50,11 @@ const TypingWorkspace = ({
     const readInput = (e) => {
         setInputText(e.target.value);   
 
-        if(paragraphWithHTML[currentIndex + 1].props.children === ' ') {
-            console.log("youre typing before a space")
-        }
-        console.log(paragraphWithHTML[currentIndex+1].props.children)
+        // if(paragraphWithHTML[currentIndex + 1].props.children === ' ') {
+        //     console.log("youre typing before a space")
+        //     paragraphWithHTML.splice(currentIndex, 0, `${<span>{e.target.value[currentIndex]}</span>}`)
+        // }
+        // console.log(paragraphWithHTML[currentIndex+1].props.children)
 
         if (!timerOn) {
             setTimerOn(true);
@@ -86,16 +90,20 @@ const TypingWorkspace = ({
                 newClassNames[currentIndex] = "text-3xl text-error"
                 return newClassNames
             });
-            if(paragraphWithHTML[currentIndex + 1].props.children === ' ') {
-                console.log("youre typing before a space")
+            if (paragraphArray[currentIndex] === ' ') {
+                console.log("you're typing before a space");
+    
+                paragraphArray.splice(currentIndex, 0, "e");
+                
+                setParagraph(paragraphArray.join(""));
+    
+                // Adjust class names accordingly
+                setCharClassNames(prevClassNames => {
+                    const newClassNames = [...prevClassNames];
+                    newClassNames.splice(currentIndex, 0, "text-3xl text-error");
+                    return newClassNames;
+                });
             }
-            // setErrorArray(paragraphWithHTML.filter((char)=> {
-            //     return errorIndexes.includes(Number(char.key))
-            // }))
-            // console.log(errorArray)
-            // setParagraph(prevParagraph => {
-            //     return prevParagraph
-            // })
         }
     };
 
