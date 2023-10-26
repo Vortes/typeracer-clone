@@ -13,7 +13,6 @@ const TypingWorkspace = ({
     const [paragraph, setParagraph] = useState("")
     const [charClassNames, setCharClassNames] = useState([])
     const [charIds, setCharIds] = useState([])
-    const [errorArray, setErrorArray] = useState([])
     const [backspacePressed, setBackspacePressed] = useState(false)
 
     let currentIndex = inputText.split("").length;
@@ -24,10 +23,6 @@ const TypingWorkspace = ({
         setCharIds(new Array(generatedParagraph.length).fill(""))
         setCharClassNames(new Array(generatedParagraph.length).fill("text-3xl text-textParagraph"))
     }, [])
-
-    useEffect(()=>{
-        console.log(currentIndex)
-    },[currentIndex])
 
     let paragraphArray = paragraph.split("");
 
@@ -112,7 +107,6 @@ const TypingWorkspace = ({
                 return newClassNames
             });
             if (paragraphArray[currentIndex] === ' ') {
-                console.log("in handle error")
                 paragraphArray.splice(currentIndex, 0, "e");
                 
                 setParagraph(paragraphArray.join(""));
@@ -139,11 +133,9 @@ const TypingWorkspace = ({
     return (
         <div className="flex flex-col">
             <input className="border py-2" type="text" onChange={readInput} value={inputText} onKeyDown={handleBackspace}/>
-            <div>
+            <div className="mt-2">
                 {paragraphWithHTML}
             </div>
-            <p className="text-lg text-error">error letters: {errorArray}</p>
-            <p className="text-lg text-error">error index: {errorIndexes}</p>
 
         </div>
     );
