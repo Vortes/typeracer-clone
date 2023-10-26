@@ -13,6 +13,7 @@ const TypingWorkspace = ({
     const [paragraph, setParagraph] = useState("")
     const [charClassNames, setCharClassNames] = useState([])
     const [errorArray, setErrorArray] = useState([])
+    const [backspacePressed, setBackspacePressed] = useState(false)
 
     let currentIndex = inputText.split("").length;
 
@@ -36,6 +37,7 @@ const TypingWorkspace = ({
 
     const handleBackspace = (e) => {
         if(e.key === "Backspace") {
+            setBackspacePressed(true)
             if(e.target.className === "text-3xl text-error") {
                 console.log("error text")
             }
@@ -44,6 +46,8 @@ const TypingWorkspace = ({
                 newClassNames[Number(currentIndex -1)] = "text-3xl text-textParagraph"
                 return newClassNames
             })
+        } else {
+            setBackspacePressed(false)
         }
     }
 
@@ -81,8 +85,9 @@ const TypingWorkspace = ({
 
     const handleError = () => {
         if (
-            !errorIndexes.includes(currentIndex) &&
-            currentIndex < paragraphArray.length
+            // !errorIndexes.includes(currentIndex) &&
+            currentIndex < paragraphArray.length && 
+            !backspacePressed
         ) {
             setErrorIndexes([...errorIndexes, currentIndex]);
             setCharClassNames(prevClassNames => {
