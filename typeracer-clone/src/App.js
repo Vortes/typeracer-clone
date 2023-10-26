@@ -5,11 +5,10 @@ import DisplayWPM from "./DisplayWPM";
 import styles from "./styles.css"
 
 function App() {
-  const [timer, setTimer] = useState(15);
+  const [timer, setTimer] = useState(50000);
   const [inputText, setInputText] = useState("");
   const [timerOn, setTimerOn] = useState(false);
   const [errorIndexes, setErrorIndexes] = useState([]);
-  let currentIndex = inputText.split("").length - 1;
 
   return (
     <div className="flex flex-col mx-44">
@@ -23,7 +22,6 @@ function App() {
         setTimerOn={setTimerOn}
         errorIndexes={errorIndexes}
         setErrorIndexes={setErrorIndexes}
-        currentIndex={currentIndex}
       />
       </div>
 
