@@ -12,6 +12,7 @@ const TypingWorkspace = ({
 }) => {
     const [paragraph, setParagraph] = useState("")
     const [charClassNames, setCharClassNames] = useState([])
+    const [charIds, setCharIds] = useState([])
     const [errorArray, setErrorArray] = useState([])
     const [backspacePressed, setBackspacePressed] = useState(false)
 
@@ -20,14 +21,19 @@ const TypingWorkspace = ({
     useEffect(()=> {
         const generatedParagraph = getRandomParagraph(100).join(" ")
         setParagraph(generatedParagraph)
-        setCharClassNames(new Array(generatedParagraph.length).fill("text-3xl text-textParagraph"));
+        setCharIds(new Array(generatedParagraph.length).fill(""))
+        setCharClassNames(new Array(generatedParagraph.length).fill("text-3xl text-textParagraph"))
     }, [])
+
+    useEffect(()=>{
+        console.log(currentIndex)
+    },[currentIndex])
 
     let paragraphArray = paragraph.split("");
 
     const convertParagraphToHTMLArray = () => {
     return paragraph.split("").map((char, index) => (
-        <span key={index} className={charClassNames[index]}>
+        <span key={index} id={charIds[index]} className={charClassNames[index]}>
             {char}
         </span>
         ))
@@ -37,9 +43,18 @@ const TypingWorkspace = ({
 
     const handleBackspace = (e) => {
         if(e.key === "Backspace") {
+            console.log("in backspace")
             setBackspacePressed(true)
-            if(e.target.className === "text-3xl text-error") {
-                console.log("error text")
+            if(charIds[currentIndex-1] === "remove-me") {
+                paragraphArray.splice(currentIndex-1, 1);
+                
+                setParagraph(paragraphArray.join(""));
+                
+                setCharClassNames(prevClassNames => {
+                    const newClassNames = [...prevClassNames];
+                    newClassNames.splice(currentIndex-1, 1);
+                    return newClassNames;
+                });
             }
             setCharClassNames(prevClassNames => {
                 const newClassNames = [...prevClassNames]
@@ -53,12 +68,6 @@ const TypingWorkspace = ({
 
     const readInput = (e) => {
         setInputText(e.target.value);   
-
-        // if(paragraphWithHTML[currentIndex + 1].props.children === ' ') {
-        //     console.log("youre typing before a space")
-        //     paragraphWithHTML.splice(currentIndex, 0, `${<span>{e.target.value[currentIndex]}</span>}`)
-        // }
-        // console.log(paragraphWithHTML[currentIndex+1].props.children)
 
         if (!timerOn) {
             setTimerOn(true);
@@ -85,7 +94,6 @@ const TypingWorkspace = ({
 
     const handleError = () => {
         if (
-            // !errorIndexes.includes(currentIndex) &&
             currentIndex < paragraphArray.length && 
             !backspacePressed
         ) {
@@ -96,13 +104,18 @@ const TypingWorkspace = ({
                 return newClassNames
             });
             if (paragraphArray[currentIndex] === ' ') {
-                console.log("you're typing before a space");
-    
+                console.log("in handle error")
                 paragraphArray.splice(currentIndex, 0, "e");
                 
                 setParagraph(paragraphArray.join(""));
+
+                setCharIds((prevCharIds)=> {
+                    const newIdNames = [...prevCharIds]
+                    newIdNames.splice(currentIndex, 0, "remove-me")
+                    console.log("set a new item with id")
+                    return newIdNames
+                })
     
-                // Adjust class names accordingly
                 setCharClassNames(prevClassNames => {
                     const newClassNames = [...prevClassNames];
                     newClassNames.splice(currentIndex, 0, "text-3xl text-error");
@@ -122,7 +135,6 @@ const TypingWorkspace = ({
             <div>
                 {paragraphWithHTML}
             </div>
-            {/* <p className="text-2xl text-textInput">{inputText}</p> */}
             <p className="text-lg text-error">error letters: {errorArray}</p>
             <p className="text-lg text-error">error index: {errorIndexes}</p>
 
