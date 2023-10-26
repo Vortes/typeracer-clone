@@ -5,7 +5,7 @@ import DisplayWPM from "./DisplayWPM";
 import styles from "./styles.css"
 
 function App() {
-  const [timer, setTimer] = useState(50000);
+  const [timer, setTimer] = useState(15);
   const [inputText, setInputText] = useState("");
   const [timerOn, setTimerOn] = useState(false);
   const [errorIndexes, setErrorIndexes] = useState([]);
