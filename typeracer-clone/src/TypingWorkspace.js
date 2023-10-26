@@ -45,17 +45,25 @@ const TypingWorkspace = ({
         if(e.key === "Backspace") {
             console.log("in backspace")
             setBackspacePressed(true)
+            
             if(charIds[currentIndex-1] === "remove-me") {
                 paragraphArray.splice(currentIndex-1, 1);
                 
                 setParagraph(paragraphArray.join(""));
                 
                 setCharClassNames(prevClassNames => {
-                    const newClassNames = [...prevClassNames];
-                    newClassNames.splice(currentIndex-1, 1);
+                    const newClassNames = [...prevClassNames]
+                    newClassNames.splice(currentIndex-1, 1)
                     return newClassNames;
                 });
+
+                setCharIds(prevCharIds => {
+                    const newIdNames = [...prevCharIds]
+                    newIdNames.splice(currentIndex-1, 1)
+                    return newIdNames
+                })
             }
+
             setCharClassNames(prevClassNames => {
                 const newClassNames = [...prevClassNames]
                 newClassNames[Number(currentIndex -1)] = "text-3xl text-textParagraph"
@@ -108,11 +116,10 @@ const TypingWorkspace = ({
                 paragraphArray.splice(currentIndex, 0, "e");
                 
                 setParagraph(paragraphArray.join(""));
-
+                
                 setCharIds((prevCharIds)=> {
                     const newIdNames = [...prevCharIds]
                     newIdNames.splice(currentIndex, 0, "remove-me")
-                    console.log("set a new item with id")
                     return newIdNames
                 })
     
