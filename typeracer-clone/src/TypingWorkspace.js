@@ -9,6 +9,7 @@ const TypingWorkspace = ({
     setInputText,
     errorIndexes,
     setErrorIndexes,
+    socket,
 }) => {
     const [paragraph, setParagraph] = useState("")
     const [charClassNames, setCharClassNames] = useState([])
@@ -137,6 +138,7 @@ const TypingWorkspace = ({
                 {paragraphWithHTML}
             </div>
 
+            {/* <p>Opp wpm: {oppWpm}</p> */}
         </div>
     );
 };

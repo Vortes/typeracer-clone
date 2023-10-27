@@ -7,10 +7,10 @@ import { socket } from './socket';
 
 
 function App() {
-  const [timer, setTimer] = useState(15);
-  const [inputText, setInputText] = useState("");
-  const [timerOn, setTimerOn] = useState(false);
-  const [errorIndexes, setErrorIndexes] = useState([]);
+  const [timer, setTimer] = useState(2)
+  const [inputText, setInputText] = useState("")
+  const [timerOn, setTimerOn] = useState(false)
+  const [errorIndexes, setErrorIndexes] = useState([])
 
   return (
     <div className="flex flex-col mx-44">
@@ -24,10 +24,12 @@ function App() {
         setTimerOn={setTimerOn}
         errorIndexes={errorIndexes}
         setErrorIndexes={setErrorIndexes}
+        socket={socket}
       />
       </div>
 
-      <DisplayWPM timer={timer} timerOn={timerOn} inputText={inputText} />
+      <DisplayWPM timer={timer} timerOn={timerOn} setTimerOn={setTimerOn} inputText={inputText} socket={socket}/>
+
     </div>
   );
 }
