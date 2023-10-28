@@ -13,7 +13,7 @@ function App() {
   const [errorIndexes, setErrorIndexes] = useState([])
 
   return (
-    <div className="flex flex-col mx-44">
+    <div className="flex flex-col w-9/12 mx-auto">
       <div className="mt-44">
       <CountdownTimer timer={timer} setTimer={setTimer} timerOn={timerOn} />
       <TypingWorkspace

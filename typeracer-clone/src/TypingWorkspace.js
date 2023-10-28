@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import getRandomParagraph from "./utils/getRandomParagraph";
 
 const TypingWorkspace = ({
@@ -15,14 +15,16 @@ const TypingWorkspace = ({
     const [charClassNames, setCharClassNames] = useState([])
     const [charIds, setCharIds] = useState([])
     const [backspacePressed, setBackspacePressed] = useState(false)
+    const inputRef = useRef()
 
     let currentIndex = inputText.split("").length;
 
     useEffect(()=> {
         const generatedParagraph = getRandomParagraph(100).join(" ")
+        inputRef.current.focus()
         setParagraph(generatedParagraph)
         setCharIds(new Array(generatedParagraph.length).fill(""))
-        setCharClassNames(new Array(generatedParagraph.length).fill("text-3xl text-textParagraph"))
+        setCharClassNames(new Array(generatedParagraph.length).fill("text-2xl text-textParagraph"))
     }, [])
 
     let paragraphArray = paragraph.split("");
@@ -62,7 +64,7 @@ const TypingWorkspace = ({
 
             setCharClassNames(prevClassNames => {
                 const newClassNames = [...prevClassNames]
-                newClassNames[Number(currentIndex -1)] = "text-3xl text-textParagraph"
+                newClassNames[Number(currentIndex -1)] = "text-2xl text-textParagraph"
                 return newClassNames
             })
         } else {
@@ -84,7 +86,7 @@ const TypingWorkspace = ({
         if (e.target.value[currentIndex] === paragraphArray[currentIndex]) {
             setCharClassNames(prevClassNames => {
                 const newClassNames = [...prevClassNames]
-                newClassNames[currentIndex] = "text-3xl text-textInput"
+                newClassNames[currentIndex] = "text-2xl text-textInput"
                 return newClassNames
             });
         }
@@ -104,7 +106,7 @@ const TypingWorkspace = ({
             setErrorIndexes([...errorIndexes, currentIndex]);
             setCharClassNames(prevClassNames => {
                 const newClassNames = [...prevClassNames]
-                newClassNames[currentIndex] = "text-3xl text-error"
+                newClassNames[currentIndex] = "text-2xl text-error"
                 return newClassNames
             });
             if (paragraphArray[currentIndex] === ' ') {
@@ -120,7 +122,7 @@ const TypingWorkspace = ({
     
                 setCharClassNames(prevClassNames => {
                     const newClassNames = [...prevClassNames];
-                    newClassNames.splice(currentIndex, 0, "text-3xl text-error");
+                    newClassNames.splice(currentIndex, 0, "text-2xl text-error");
                     return newClassNames;
                 });
             }
@@ -133,7 +135,7 @@ const TypingWorkspace = ({
 
     return (
         <div className="flex flex-col">
-            <input className="border py-2" type="text" onChange={readInput} value={inputText} onKeyDown={handleBackspace}/>
+            <input ref={inputRef} className="border py-2" type="text" onChange={readInput} value={inputText} onKeyDown={handleBackspace}/>
             <div className="mt-2">
                 {paragraphWithHTML}
             </div>

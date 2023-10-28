@@ -10,7 +10,6 @@ const DisplayWPM = ({ timer, timerOn, setTimerOn, inputText, socket}) => {
 
       socket.emit("send-wpm", wpm)
       socket.on("receive-message", message => {
-        console.log(message)
         setOppWpm(message)
       })
     }
@@ -33,8 +32,8 @@ const DisplayWPM = ({ timer, timerOn, setTimerOn, inputText, socket}) => {
   };
   return (
     <>
-      <p className="text-2xl text-textInput mt-2">wpm: {wpm}</p>
-      <p className="text-2xl text-textInput mt-4">opp wpm: {oppWpm}</p>
+      <p className="text-xl text-textInput mt-2">wpm: {wpm}</p>
+      <p className="text-xl text-textInput mt-4">opp wpm: {oppWpm}</p>
     </>
   );
 };
