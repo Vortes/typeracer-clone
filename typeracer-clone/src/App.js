@@ -1,17 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TypingWorkspace from "./TypingWorkspace";
 import CountdownTimer from "./CountdownTimer";
 import DisplayWPM from "./DisplayWPM";
 import styles from "./styles.css"
+import { socket } from './socket';
+
 
 function App() {
-  const [timer, setTimer] = useState(15);
-  const [inputText, setInputText] = useState("");
-  const [timerOn, setTimerOn] = useState(false);
-  const [errorIndexes, setErrorIndexes] = useState([]);
+  const [timer, setTimer] = useState(2)
+  const [inputText, setInputText] = useState("")
+  const [timerOn, setTimerOn] = useState(false)
+  const [errorIndexes, setErrorIndexes] = useState([])
 
   return (
-    <div className="flex flex-col mx-44">
+    <div className="flex flex-col w-9/12 mx-auto">
       <div className="mt-44">
       <CountdownTimer timer={timer} setTimer={setTimer} timerOn={timerOn} />
       <TypingWorkspace
@@ -22,10 +24,12 @@ function App() {
         setTimerOn={setTimerOn}
         errorIndexes={errorIndexes}
         setErrorIndexes={setErrorIndexes}
+        socket={socket}
       />
       </div>
 
-      <DisplayWPM timer={timer} timerOn={timerOn} inputText={inputText} />
+      <DisplayWPM timer={timer} timerOn={timerOn} setTimerOn={setTimerOn} inputText={inputText} socket={socket}/>
+
     </div>
   );
 }
