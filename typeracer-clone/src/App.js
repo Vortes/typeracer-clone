@@ -7,7 +7,7 @@ import { socket } from './socket';
 
 
 function App() {
-  const [timer, setTimer] = useState(2)
+  const [timer, setTimer] = useState(15)
   const [inputText, setInputText] = useState("")
   const [timerOn, setTimerOn] = useState(false)
   const [errorIndexes, setErrorIndexes] = useState([])

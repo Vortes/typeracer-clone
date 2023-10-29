@@ -15,6 +15,7 @@ const TypingWorkspace = ({
     const [charClassNames, setCharClassNames] = useState([])
     const [charIds, setCharIds] = useState([])
     const [backspacePressed, setBackspacePressed] = useState(false)
+    const [formData, setFormData] = useState({roomName: ""})
     const inputRef = useRef()
 
     let currentIndex = inputText.split("").length;
@@ -36,6 +37,11 @@ const TypingWorkspace = ({
         </span>
         ))
     }   
+
+    const handleRoom = (e) => {
+        e.preventDefault()
+        console.log(e.target.value)
+    }
 
     const paragraphWithHTML = convertParagraphToHTMLArray()
 
@@ -135,12 +141,16 @@ const TypingWorkspace = ({
 
     return (
         <div className="flex flex-col">
+
+            <form className="flex mb-4 gap-x-2" onSubmit={handleRoom}>
+                <input type="text" className="border" value={formData.roomName} />
+                <button className="bg-white px-2 rounded-md">Join room</button>
+            </form>
+
             <input ref={inputRef} className="border py-2" type="text" onChange={readInput} value={inputText} onKeyDown={handleBackspace}/>
             <div className="mt-2">
                 {paragraphWithHTML}
             </div>
-
-            {/* <p>Opp wpm: {oppWpm}</p> */}
         </div>
     );
 };

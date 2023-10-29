@@ -20,6 +20,10 @@ io.on('connection', socket => {
     socket.on("send-wpm", message => {
         socket.broadcast.emit("receive-message", message)
     })
+
+    socket.on("join-room", room => {
+        socket.join(room)
+    })
 })
 
 app.get("/api", (req, res) => {
