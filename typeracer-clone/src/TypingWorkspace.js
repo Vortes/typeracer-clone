@@ -10,12 +10,13 @@ const TypingWorkspace = ({
     errorIndexes,
     setErrorIndexes,
     socket,
+    roomName,
+    setRoomName,
 }) => {
     const [paragraph, setParagraph] = useState("")
     const [charClassNames, setCharClassNames] = useState([])
     const [charIds, setCharIds] = useState([])
     const [backspacePressed, setBackspacePressed] = useState(false)
-    const [formData, setFormData] = useState({roomName: ""})
     const inputRef = useRef()
 
     let currentIndex = inputText.split("").length;
@@ -40,7 +41,12 @@ const TypingWorkspace = ({
 
     const handleRoom = (e) => {
         e.preventDefault()
-        console.log(e.target.value)
+        console.log(roomName)
+
+        if (roomName !== "") {
+            socket.emit("join-room", roomName)
+        }
+        // console.log(e.target.value)
     }
 
     const paragraphWithHTML = convertParagraphToHTMLArray()
@@ -143,7 +149,7 @@ const TypingWorkspace = ({
         <div className="flex flex-col">
 
             <form className="flex mb-4 gap-x-2" onSubmit={handleRoom}>
-                <input type="text" className="border" value={formData.roomName} />
+                <input type="text" className="border" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
                 <button className="bg-white px-2 rounded-md">Join room</button>
             </form>
 

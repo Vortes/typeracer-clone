@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const DisplayWPM = ({ timer, timerOn, setTimerOn, inputText, socket}) => {
+const DisplayWPM = ({ timer, timerOn, setTimerOn, inputText, socket, roomName}) => {
   const [wpm, setWpm] = useState(0);
   const [oppWpm, setOppWpm] = useState(0)
 
@@ -8,7 +8,7 @@ const DisplayWPM = ({ timer, timerOn, setTimerOn, inputText, socket}) => {
     if (!timerOn) {
       console.log("times up")
 
-      socket.emit("send-wpm", wpm)
+      socket.emit("send-wpm", wpm, roomName)
       socket.on("receive-message", message => {
         setOppWpm(message)
       })

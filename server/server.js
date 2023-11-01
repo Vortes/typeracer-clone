@@ -17,13 +17,17 @@ app.use(cors())
 
 io.on('connection', socket => {
     console.log("a user connected: " + socket.id)
-    socket.on("send-wpm", message => {
-        socket.broadcast.emit("receive-message", message)
+
+    socket.on("send-wpm", (message, room) => {
+        if(socket.to(room) !== "") {
+            socket.to(room).emit("receive-message", message)
+        }
     })
 
     socket.on("join-room", room => {
         socket.join(room)
     })
+
 })
 
 app.get("/api", (req, res) => {
