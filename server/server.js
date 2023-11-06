@@ -17,6 +17,7 @@ app.use(cors())
 
 io.on('connection', socket => {
     console.log("a user connected: " + socket.id)
+    socket.emit("test", "hey there")
 
     socket.on("send-wpm", (message, room) => {
         if(socket.to(room) !== "") {
