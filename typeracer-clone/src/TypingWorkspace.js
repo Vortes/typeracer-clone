@@ -42,6 +42,9 @@ const TypingWorkspace = ({
     const handleRoom = (e) => {
         e.preventDefault()
         console.log(roomName)
+        socket.on("test", (message) => {
+            console.log(message)
+        })
 
         if (roomName !== "") {
             socket.emit("join-room", roomName)
