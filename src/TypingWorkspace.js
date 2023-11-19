@@ -1,167 +1,182 @@
-import React, { useEffect, useRef, useState } from "react";
-import getRandomParagraph from "./utils/getRandomParagraph";
+import React, { useEffect, useRef, useState } from "react"
+import getRandomParagraph from "./utils/getRandomParagraph"
 
 const TypingWorkspace = ({
-    timer,
-    timerOn,
-    setTimerOn,
-    inputText,
-    setInputText,
-    errorIndexes,
-    setErrorIndexes,
-    socket,
-    roomName,
-    setRoomName,
+	timer,
+	timerOn,
+	setTimerOn,
+	inputText,
+	setInputText,
+	errorIndexes,
+	setErrorIndexes,
+	socket,
+	roomName,
+	setRoomName,
 }) => {
-    const [paragraph, setParagraph] = useState("")
-    const [charClassNames, setCharClassNames] = useState([])
-    const [charIds, setCharIds] = useState([])
-    const [backspacePressed, setBackspacePressed] = useState(false)
-    const inputRef = useRef()
+	const [paragraph, setParagraph] = useState("")
+	const [charClassNames, setCharClassNames] = useState([])
+	const [charIds, setCharIds] = useState([])
+	const [backspacePressed, setBackspacePressed] = useState(false)
+	const inputRef = useRef()
 
-    let currentIndex = inputText.split("").length;
+	let currentIndex = inputText.split("").length
 
-    useEffect(()=> {
-        const generatedParagraph = getRandomParagraph(100).join(" ")
-        inputRef.current.focus()
-        setParagraph(generatedParagraph)
-        setCharIds(new Array(generatedParagraph.length).fill(""))
-        setCharClassNames(new Array(generatedParagraph.length).fill("text-2xl text-textParagraph"))
-    }, [])
+	useEffect(() => {
+		const generatedParagraph = getRandomParagraph(100).join(" ")
+		inputRef.current.focus()
+		setParagraph(generatedParagraph)
+		setCharIds(new Array(generatedParagraph.length).fill(""))
+		setCharClassNames(
+			new Array(generatedParagraph.length).fill("text-2xl text-textParagraph")
+		)
+	}, [])
 
-    let paragraphArray = paragraph.split("");
+	let paragraphArray = paragraph.split("")
 
-    const convertParagraphToHTMLArray = () => {
-    return paragraph.split("").map((char, index) => (
-        <span key={index} id={charIds[index]} className={charClassNames[index]}>
-            {char}
-        </span>
-        ))
-    }   
+	const convertParagraphToHTMLArray = () => {
+		return paragraph.split("").map((char, index) => (
+			<span
+				key={index}
+				id={charIds[index]}
+				className={charClassNames[index]}
+			>
+				{char}
+			</span>
+		))
+	}
 
-    const handleRoom = (e) => {
-        e.preventDefault()
-        console.log(roomName)
-        socket.on("test", (message) => {
-            console.log(message)
-        })
+	const handleRoom = (e) => {
+		e.preventDefault()
+		console.log(roomName)
+		socket.on("test", (message) => {
+			console.log(message)
+		})
 
-        if (roomName !== "") {
-            socket.emit("join-room", roomName)
-        }
-        // console.log(e.target.value)
-    }
+		if (roomName !== "") {
+			socket.emit("join-room", roomName)
+		}
+		// console.log(e.target.value)
+	}
 
-    const paragraphWithHTML = convertParagraphToHTMLArray()
+	const paragraphWithHTML = convertParagraphToHTMLArray()
 
-    const handleBackspace = (e) => {
-        if(e.key === "Backspace") {
-            console.log("in backspace")
-            setBackspacePressed(true)
-            
-            if(charIds[currentIndex-1] === "remove-me") {
-                paragraphArray.splice(currentIndex-1, 1);
-                
-                setParagraph(paragraphArray.join(""));
-                
-                setCharClassNames(prevClassNames => {
-                    const newClassNames = [...prevClassNames]
-                    newClassNames.splice(currentIndex-1, 1)
-                    return newClassNames;
-                });
+	const handleBackspace = (e) => {
+		if (e.key === "Backspace") {
+			console.log("in backspace")
+			setBackspacePressed(true)
 
-                setCharIds(prevCharIds => {
-                    const newIdNames = [...prevCharIds]
-                    newIdNames.splice(currentIndex-1, 1)
-                    return newIdNames
-                })
-            }
+			if (charIds[currentIndex - 1] === "remove-me") {
+				paragraphArray.splice(currentIndex - 1, 1)
 
-            setCharClassNames(prevClassNames => {
-                const newClassNames = [...prevClassNames]
-                newClassNames[Number(currentIndex -1)] = "text-2xl text-textParagraph"
-                return newClassNames
-            })
-        } else {
-            setBackspacePressed(false)
-        }
-    }
+				setParagraph(paragraphArray.join(""))
 
-    const readInput = (e) => {
-        setInputText(e.target.value);   
+				setCharClassNames((prevClassNames) => {
+					const newClassNames = [...prevClassNames]
+					newClassNames.splice(currentIndex - 1, 1)
+					return newClassNames
+				})
 
-        if (!timerOn) {
-            setTimerOn(true);
-        }
+				setCharIds((prevCharIds) => {
+					const newIdNames = [...prevCharIds]
+					newIdNames.splice(currentIndex - 1, 1)
+					return newIdNames
+				})
+			}
 
-        if (timer === 0) {
-            e.target.disabled = true
-        }
+			setCharClassNames((prevClassNames) => {
+				const newClassNames = [...prevClassNames]
+				newClassNames[Number(currentIndex - 1)] = "text-2xl text-textParagraph"
+				return newClassNames
+			})
+		} else {
+			setBackspacePressed(false)
+		}
+	}
 
-        if (e.target.value[currentIndex] === paragraphArray[currentIndex]) {
-            setCharClassNames(prevClassNames => {
-                const newClassNames = [...prevClassNames]
-                newClassNames[currentIndex] = "text-2xl text-textInput"
-                return newClassNames
-            });
-        }
+	const readInput = (e) => {
+		setInputText(e.target.value)
 
-        if (e.target.value[currentIndex] !== paragraphArray[currentIndex]) {
-            handleError();
-        } else if (errorIndexes.includes(currentIndex)) {
-            correctError();
-        }
-    };
+		if (!timerOn) {
+			setTimerOn(true)
+		}
 
-    const handleError = () => {
-        if (
-            currentIndex < paragraphArray.length && 
-            !backspacePressed
-        ) {
-            setErrorIndexes([...errorIndexes, currentIndex]);
-            setCharClassNames(prevClassNames => {
-                const newClassNames = [...prevClassNames]
-                newClassNames[currentIndex] = "text-2xl text-error"
-                return newClassNames
-            });
-            if (paragraphArray[currentIndex] === ' ') {
-                paragraphArray.splice(currentIndex, 0, "e");
-                
-                setParagraph(paragraphArray.join(""));
-                
-                setCharIds((prevCharIds)=> {
-                    const newIdNames = [...prevCharIds]
-                    newIdNames.splice(currentIndex, 0, "remove-me")
-                    return newIdNames
-                })
-    
-                setCharClassNames(prevClassNames => {
-                    const newClassNames = [...prevClassNames];
-                    newClassNames.splice(currentIndex, 0, "text-2xl text-error");
-                    return newClassNames;
-                });
-            }
-        }
-    };
+		if (timer === 0) {
+			e.target.disabled = true
+		}
 
-    const correctError = () => {
-        setErrorIndexes(errorIndexes.filter((error) => error !== currentIndex));
-    };
+		if (e.target.value[currentIndex] === paragraphArray[currentIndex]) {
+			setCharClassNames((prevClassNames) => {
+				const newClassNames = [...prevClassNames]
+				newClassNames[currentIndex] = "text-2xl text-textInput"
+				return newClassNames
+			})
+		}
 
-    return (
-        <div className="flex flex-col">
+		if (e.target.value[currentIndex] !== paragraphArray[currentIndex]) {
+			handleError()
+		} else if (errorIndexes.includes(currentIndex)) {
+			correctError()
+		}
+	}
 
-            <form className="flex mb-4 gap-x-2" onSubmit={handleRoom}>
-                <input type="text" className="border" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
-                <button className="bg-white px-2 rounded-md">Join room</button>
-            </form>
+	const handleError = () => {
+		if (currentIndex < paragraphArray.length && !backspacePressed) {
+			setErrorIndexes([...errorIndexes, currentIndex])
+			setCharClassNames((prevClassNames) => {
+				const newClassNames = [...prevClassNames]
+				newClassNames[currentIndex] = "text-2xl text-error"
+				return newClassNames
+			})
+			if (paragraphArray[currentIndex] === " ") {
+				paragraphArray.splice(currentIndex, 0, "e")
 
-            <input ref={inputRef} className="border py-2" type="text" onChange={readInput} value={inputText} onKeyDown={handleBackspace}/>
-            <div className="mt-2">
-                {paragraphWithHTML}
-            </div>
-        </div>
-    );
-};
+				setParagraph(paragraphArray.join(""))
 
-export default TypingWorkspace;
+				setCharIds((prevCharIds) => {
+					const newIdNames = [...prevCharIds]
+					newIdNames.splice(currentIndex, 0, "remove-me")
+					return newIdNames
+				})
+
+				setCharClassNames((prevClassNames) => {
+					const newClassNames = [...prevClassNames]
+					newClassNames.splice(currentIndex, 0, "text-2xl text-error")
+					return newClassNames
+				})
+			}
+		}
+	}
+
+	const correctError = () => {
+		setErrorIndexes(errorIndexes.filter((error) => error !== currentIndex))
+	}
+
+	return (
+		<div className="flex flex-col">
+			<form
+				className="flex mb-4 gap-x-2"
+				onSubmit={handleRoom}
+			>
+				<input
+					type="text"
+					className="border"
+					value={roomName}
+					onChange={(e) => setRoomName(e.target.value)}
+				/>
+				<button className="bg-white px-2 rounded-md">Join room</button>
+			</form>
+
+			<input
+				ref={inputRef}
+				className="border py-2"
+				type="text"
+				onChange={readInput}
+				value={inputText}
+				onKeyDown={handleBackspace}
+			/>
+			<div className="mt-2">{paragraphWithHTML}</div>
+		</div>
+	)
+}
+
+export default TypingWorkspace
