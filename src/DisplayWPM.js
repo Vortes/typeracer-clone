@@ -13,8 +13,6 @@ const DisplayWPM = ({
 
 	useEffect(() => {
 		if (!timerOn) {
-			console.log("times up")
-
 			socket.emit("send-wpm", wpm, roomName)
 			socket.on("receive-message", (message) => {
 				setOppWpm(message)
