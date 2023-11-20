@@ -17,6 +17,7 @@ const TypingWorkspace = ({
 	const [charClassNames, setCharClassNames] = useState([])
 	const [charIds, setCharIds] = useState([])
 	const [backspacePressed, setBackspacePressed] = useState(false)
+	const [roomParagraph, setRoomParagraph] = useState("")
 	const inputRef = useRef()
 
 	let currentIndex = inputText.split("").length
@@ -30,6 +31,20 @@ const TypingWorkspace = ({
 			new Array(generatedParagraph.length).fill("text-2xl text-textParagraph")
 		)
 	}, [])
+
+	// ensures that all characters get the class treatment from the server
+	useEffect(() => {
+		if (
+			paragraph &&
+			(charClassNames.length !== paragraph.length ||
+				charIds.length !== paragraph.length)
+		) {
+			setCharIds(new Array(paragraph.length).fill(""))
+			setCharClassNames(
+				new Array(paragraph.length).fill("text-2xl text-textParagraph")
+			)
+		}
+	}, [paragraph, charClassNames.length, charIds.length]) // Dependency on paragraph and lengths of charClassNames and charIds
 
 	let paragraphArray = paragraph.split("")
 
@@ -47,22 +62,18 @@ const TypingWorkspace = ({
 
 	const handleRoom = (e) => {
 		e.preventDefault()
-		console.log(roomName)
-		socket.on("test", (message) => {
-			console.log(message)
-		})
 
 		if (roomName !== "") {
-			socket.emit("join-room", roomName)
+			socket.emit("join-room", roomName, (paragraph) => {
+				setParagraph(paragraph)
+			})
 		}
-		// console.log(e.target.value)
 	}
 
 	const paragraphWithHTML = convertParagraphToHTMLArray()
 
 	const handleBackspace = (e) => {
 		if (e.key === "Backspace") {
-			console.log("in backspace")
 			setBackspacePressed(true)
 
 			if (charIds[currentIndex - 1] === "remove-me") {

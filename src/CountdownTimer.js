@@ -31,9 +31,24 @@ const CountdownTimer = ({ timer, setTimer, timerOn }) => {
 	return (
 		<>
 			<div className="flex gap-x-2 text-lg text-white mb-2">
-				<p onClick={() => handleTimeChange(2)}>2</p>
-				<p onClick={() => handleTimeChange(15)}>15</p>
-				<p onClick={() => handleTimeChange(30)}>30</p>
+				<p
+					className="hover:cursor-pointer"
+					onClick={() => handleTimeChange(2)}
+				>
+					2
+				</p>
+				<p
+					className="hover:cursor-pointer"
+					onClick={() => handleTimeChange(15)}
+				>
+					15
+				</p>
+				<p
+					className="hover:cursor-pointer"
+					onClick={() => handleTimeChange(30)}
+				>
+					30
+				</p>
 			</div>
 			<p className="text-2xl text-secondary mb-2">{timer}</p>
 		</>
